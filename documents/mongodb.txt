@@ -1,0 +1,78 @@
+RDBMS: 		Database	Table 		Column	Row 	Index
+MongoDB: 	Database	Collection 	Field 	Document 	Index
+
+* Các mô hình triển khai MongoDB:
+- Mô hình:
+	+ Standalone: có 1 server duy nhất, cài MongoDB trên đó. Các ứng dụng sẽ tương tác (đọc, ghi) với mongoDB ở đây
+	+ Replication: có nhiều server, mỗi server cài mongoDB, trong đó có 1 server là primary. Các ứng dụng sẽ tương tác với primary server, primary sẽ cập nhật các dữ liệu cho secondary
+	+ Sharding(phân tán): phân tán thành các cụm, dữ liệu cũng phân tán cho từng cụm, các cụm cũng triển khai mô hình replication
+- Hạ tầng triển khai:
+	+ Sử dụng Cloud (MongoDB Atlas)
+
+-Kiến trúc:
+	+ Logic
+	+ Kiến trúc khi hoạt động:
+		Database được cài trên bộ nhớ server, trong đó có 1 phần là database memory. Bộ nhớ phần cứng sẽ lưu các file lưu trữ của database. Có đường truyền giữa database memory với các file trong bộ nhớ
+		+ Storage Engine:
+			Mỗi loại SE có 1 giải thuật xử lý riêng, có ưu nhược điểm riêng
+
+
+- command in mongoshell
+show databases
+show collections
+
+use wecommit (nếu chưa tồn tại thì sẽ tạo database)
+
+db.mycollection.insertOne({
+	name: 'long'
+});
+
+db.mycollection.insertMany({
+	
+}, {
+	
+});
+
+db.mycollection.find();
+
+db.mycollection.find().limit(2);
+
+db.mycollection.find({age: 25}) // tìm có điều kiện
+
+db.mycollection.find({
+	$and: [
+		{name: 'long'},
+		{age: 25}
+	]
+})
+
+tương tự thay 'and' bằng 'or'
+
+db.mycollection.find({
+	age: {$gt: 30} // greater than
+})
+thay gt bằng lt để được less than
+
+// sắp xếp
+db.mycollection.find().sort({age: 1}) tăng dần
+db.mycollection.find().sort({age: -1}) giảm dần
+
+db.mycollection.updateOne(
+	{name: 'huy'},
+	{$set: {age:56}}
+); // update One chỉ lấy ông đầu tiên thoả mãn
+
+db.mycollection.updateMany(
+	{name: 'huy'},
+	{$set: {age:56}}
+)
+
+db.mycollection.deleteOne({
+	name: 'huy'
+})
+
+db.mycollection.deleteMany({
+	age: {$gt: 29}
+})
+
+db.mycollection.drop()
